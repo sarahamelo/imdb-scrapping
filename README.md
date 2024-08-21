@@ -112,12 +112,12 @@ This code snippet details how specific data (title, release date, rating, and su
 
 
 - ```movie_soup.find("span", {"class": "hero__primary-text", "data-testid": "hero__primary-text"}):```
-Esse código procura um elemento <span> no HTML que tenha a classe "hero__primary-text" e o atributo "data-testid" com o valor "hero__primary-text".
-Se esse elemento for encontrado, ele é armazenado na variável title_tag.
+This code searches the element `span` in the HTML that has the class "hero__primary_text" and the attribute "data-testid" with value "hero__primary-text".
+If this element was found, it is stored in the variable _title_tag_
 - ```if title_tag:```:
-Se title_tag não for None (ou seja, o elemento foi encontrado), o código dentro do bloco if é executado.
+If _title_tag_ is not None (which it means, if the element was found), the code inside the block if will be executed.
 - ```title = title_tag.text.strip()```:
-O texto contido no elemento title_tag é extraído e qualquer espaço em branco adicional é removido com strip(). O resultado é armazenado na variável title.
+The text contained in element _title_tag_ is extracted and any aditional blan space is removed with `strip(). The result is stored in the variable _title_.
 
 The same logic is applied to _date_tag_, _rating_tag_ and _plot_tag_.
 <br>
