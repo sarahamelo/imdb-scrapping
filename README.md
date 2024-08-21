@@ -8,7 +8,7 @@ Is the process of using computer programming to extract website's data and conve
 What we are doing here is getting the top 10 movies from IMDB website and returning the title, release date, rating and the plot. After that, the program will create a .csv file that will contain the top 10 and their information.
 To get there, we need to set a little things first like getting the libraries we are going to need.
 
-```
+``` python
 import requests
 import time
 import csv
@@ -25,7 +25,7 @@ According to the library's document:
 
 ---
 
-```
+``` python
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
     'Accept-Language': 'pt-BR'}
@@ -38,7 +38,7 @@ sse código define uma função chamada extract_movie_details, que faz uma requi
 
 ---
 
-```
+``` python
 def extract_movie_details(movie_link):
     time.sleep(random.uniform(0, 0.2))
     response = requests.get(movie_link, headers=headers)
@@ -58,7 +58,7 @@ The request response is stored in the response variable.
 
 ---
 
-```
+``` python
 if response.status_code == 200:
         movie_soup = BeautifulSoup(response.content, 'html.parser')
         title = None
@@ -87,7 +87,7 @@ Initializing these variables with None ensures that they have a default value in
 
 ---
 
-```
+``` python
         title_tag = movie_soup.find("span", {"class": "hero__primary-text", "data-testid": "hero__primary-text"})
         if title_tag:
             title = title_tag.text.strip()
@@ -125,7 +125,7 @@ The same logic is applied to _date_tag_, _rating_tag_ and _plot_tag_.
 
 ---
 
-```
+``` python
 if all([title, date, rating, plot]):
             print(f'Título: {title}, Data: {date}, Avaliação: {rating}, Resumo: {plot}')
             with open('movies.csv', mode='a', newline='', encoding='utf-8') as file:
@@ -139,7 +139,7 @@ if all([title, date, rating, plot]):
 This code snippet adds the final logic to process the data extracted from a movie page and save it to a CSV file. Let's understand each part:
 
 ### **Completeness Check**
-```
+``` python
 if all([title, date, rating, plot]):
 all([title, date, rating, plot]):
 ```
@@ -147,13 +147,13 @@ The all() function checks whether all elements in the given list are true (that 
 If all the title, date, rating, and plot variables contain valid values ​​(not None), the code block inside this if will be executed.
 
 ### **Details Printing**
-```
+``` python
 print(f'Title: {title}, Date: {date}, Rating: {rating}, Summary: {plot}')
 ```
 This prints to the console the movie details that were extracted and stored in the title, date, rating and plot variables.
 
 ### **Save to a CSV File**
-```
+``` python
 with open('movies.csv', mode='a', newline='', encoding='utf-8') as file:
     movie_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     movie_writer.writerow([title, date, rating, plot])
@@ -172,7 +172,7 @@ Writes a new line to the CSV file with the title, date, rating and plot values �
 
 ---
 
-```
+``` python
 def extract_movies(soup):
     # Verificar se a tabela existe antes de tentar acessar seu conteúdo
     movies_list = soup.find('ul', attrs={'class': 'ipc-metadata-list ipc-metadata-list--dividers-between sc-a1e81754-0 dHaCOW compact-list-view ipc-metadata-list--base'})
@@ -196,7 +196,7 @@ This code defines a function called extract_movies, which extracts movie links f
 
 ### **Check Table Existence**
 
-```
+``` python
 movies_list = soup.find('ul', attrs={'class': 'ipc-metadata-list ipc-metadata-list--dividers-between sc-a1e81754-0 dHaCOW compact-list-view ipc-metadata-list- -base'})
 ```
 
@@ -207,15 +207,15 @@ Searches for a `<ul>` element (unordered list) with the specified classes. This 
 Checks whether the `<ul>` element was found. If it is not found, the code inside the if will not be executed.
 
 ### **Extract List Items**
-
-```
+ 
+``` python
 movie_items = movies_list.find_all('li')
 ```
 `movies_list.find_all('li')`:
 If the list was found, this line searches for all `<li>` items (list items) within the `<ul>` element. Each `<li>` item must represent a movie.
 
 ### **Get Movie Links**
-```
+``` python
 if movie_items:
     movie_links = ['https://imdb.com' + item.find('a')['href'] for item in movie_items if item.find('a')]
     movie_links = movie_links[:10]
@@ -230,7 +230,7 @@ Creates a list of movie links. For each list item (item), find the first <a> lin
 Limits the list to a maximum of 10 links, to avoid processing an excessive number of movies at once.
 
 ### **Process Links with Multiple Threads**
-```
+``` python
 if movie_links:
     threads = min(MAX_THREADS, len(movie_links))
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
@@ -252,7 +252,7 @@ Uses the executor's map method to apply the extract_movie_details function to ea
 
 -- 
 
-```
+``` python
 def main():
     start_time = time.time()
 
@@ -279,7 +279,7 @@ The code defines the main function, which is responsible for coordinating the pr
 time.time(): Captures the current timestamp in seconds since the epoch (usually January 1, 1970). This value is used to calculate the total execution time of the main function.
 
 ### **Define the URL and Make the Request**
-```
+``` python
 popular_movies_url = 'https://www.imdb.com/chart/top/?ref_=nv_mv_250'
 response = requests.get(popular_movies_url, headers=headers)
 ```
@@ -288,13 +288,13 @@ response = requests.get(popular_movies_url, headers=headers)
 `requests.get(popular_movies_url, headers=headers)`: Makes a GET request for the defined URL, using the specified headers to simulate a browser and avoid problems with blocking.
 
 ### **Check Request Status**
-```
+``` python
 if response.status_code == 200:
     soup = BeautifulSoup(response.content, 'html.parser')
     extract_movies(soup)
 else:
     print(f'Failed to retrieve movie list: Status code {response.status_code}')
-```
+``` 
 `if response.status_code == 200:`: Checks whether the request was successful. If the status code is 200, the response content is parsed.
 
 `soup = BeautifulSoup(response.content, 'html.parser')`: Creates a BeautifulSoup object to parse the HTML of the received page.
@@ -304,10 +304,10 @@ else:
 `else:`: If the request fails (status code other than 200), an error message is printed with the returned status code.
 
 ### **Record and Print Execution Time**
-```
+``` python
 end_time = time.time()
 print('Total time: ', end_time - start_time)
-```
+``` 
 `end_time = time.time()`: Captures the current timestamp after code execution.
 
 `print('Total time: ', end_time - start_time)`: Calculates the total execution time of the main function by subtracting the start time (start_time) from the end time (end_time). Prints the total execution time in seconds.
