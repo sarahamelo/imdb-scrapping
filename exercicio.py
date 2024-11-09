@@ -39,12 +39,12 @@ def extract_movie_details(movie_link):
         #   date = date_tag.text.strip()
 
         # Extrair avaliação
-        rating_tag = movie_soup.find("span", {"class": "sc-eb51e184-1 ljxVSS"})
+        rating_tag = movie_soup.find("span", {"class": "sc-d541859f-1 imUuxf"})
         if rating_tag:
             rating = rating_tag.text.strip()
 
         # Extrair resumo
-        plot_tag = movie_soup.find("span", {"role": "presentation", "data-testid": "plot-l", "class": "sc-2d37a7c7-1 dCcJCA"})
+        plot_tag = movie_soup.find("span", {"role": "presentation", "data-testid": "plot-l", "class": "sc-3ac15c8d-1 gkeSEi"})
         if plot_tag:
             plot = plot_tag.text.strip()
 
@@ -62,7 +62,7 @@ def extract_movie_details(movie_link):
 
 def extract_movies(soup):
     # Verificar se a tabela existe antes de tentar acessar seu conteúdo
-    movies_list = soup.find('ul', attrs={'class': 'ipc-metadata-list ipc-metadata-list--dividers-between sc-a1e81754-0 dHaCOW compact-list-view ipc-metadata-list--base'})
+    movies_list = soup.find('ul', attrs={'class': 'ipc-metadata-list ipc-metadata-list--dividers-between sc-a1e81754-0 iyTDQy compact-list-view ipc-metadata-list--base', "role":'presentation'})
     
     if movies_list:
         movie_items = movies_list.find_all('li')
@@ -83,7 +83,7 @@ def main():
     start_time = time.time()
 
     # IMDB Most Popular Movies - 100 movies
-    popular_movies_url = 'https://www.imdb.com/chart/top/?ref_=nv_mv_250'
+    popular_movies_url = 'https://www.imdb.com/chart/top/'
     response = requests.get(popular_movies_url, headers=headers)
     
     if response.status_code == 200:
